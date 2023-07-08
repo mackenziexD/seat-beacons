@@ -20,7 +20,7 @@ class BeaconsDataTable extends DataTable
             ->editColumn('region', function ($row) {
                 return $row->solar_system->constellation->region->name;
             })
-            ->editColumn('fuel_expires_in_days', function ($row) {
+            ->editColumn('fuel_expires', function ($row) {
                 return \Carbon\Carbon::parse($row->fuel_expires)->diffInDays();
             });
     }
