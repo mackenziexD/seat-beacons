@@ -2,6 +2,7 @@
 
 namespace Helious\SeatBeacons\Http\Controllers;
 
+use Seat\Eveapi\Models\Corporation\CorporationStructure;
 use Helious\SeatBeacons\Http\Datatables\BeaconsDataTable;
 use Seat\Web\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,5 +19,6 @@ class BeaconsController extends Controller
     {
         return $dataTable->render('seat-beacons::beacons.index');
     }
+
 
 }

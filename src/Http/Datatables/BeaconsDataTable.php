@@ -45,7 +45,7 @@ class BeaconsDataTable extends DataTable
             'name',
             'constellation',
             'region',
-            'fuel_expires_in_days'
+            'fuel_expires'
         ];
     }
 
