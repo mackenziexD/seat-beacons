@@ -1,7 +1,7 @@
 <?php
 return [
-    'member' => [
-        'label' => 'beacons',
+    'access' => [
+        'label' => 'Access Beacons',
         'description' => 'Permission to access the Beacons page.',
     ],
 ];

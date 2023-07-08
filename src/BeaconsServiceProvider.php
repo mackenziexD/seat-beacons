@@ -15,7 +15,8 @@ class BeaconsServiceProvider extends AbstractSeatPlugin
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/Config/seat-beacons.sidebar.php', 'package.sidebar');
+        $this->mergeConfigFrom(__DIR__ . '/Config/seat-beacons.php', 'seat-beacons');
+        $this->mergeConfigFrom(__DIR__ . '/Config/seat-beacons.sidebar.php', 'package.sidebar.tools.entries');
         $this->registerPermissions(__DIR__ . '/Config/seat-beacons.permissions.php', 'seat-beacons');
     }
 
@@ -26,16 +27,9 @@ class BeaconsServiceProvider extends AbstractSeatPlugin
      */
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__.'/routes.php');-
-
-        // Load views
+        $this->loadRoutesFrom(__DIR__.'/routes.php');
         $this->loadViewsFrom(__DIR__.'/resources/views', 'seat-beacons');
-
-        // Publish migrations
-        $this->publishes([
-            __DIR__.'/database/migrations' => database_path('migrations'),
-        ], 'migrations');
-
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
     }
 
     /**
