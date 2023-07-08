@@ -2,8 +2,7 @@
 
 namespace Helious\SeatBeacons\Http\Controllers;
 
-use Seat\Eveapi\Models\Corporation\CorporationStructure;
-
+use Helious\SeatBeacons\Http\Datatables\BeaconsDataTable;
 use Seat\Web\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,11 +14,9 @@ class BeaconsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function index(Request $request)
+    public function index(BeaconsDataTable $dataTable)
     {
-        $beacons = CorporationStructure::where('type_id', '35840')->get();
-        return view('seat-beacons::beacons.index', compact('beacons'));
+        return $dataTable->render('seat-beacons::beacons.index');
     }
-
 
 }
