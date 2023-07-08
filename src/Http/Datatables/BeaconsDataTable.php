@@ -36,7 +36,7 @@ class BeaconsDataTable extends DataTable
                     ->setTableId('beacons-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->orderBy(1);
+                    ->orderBy(3);
     }
 
     protected function getColumns()
