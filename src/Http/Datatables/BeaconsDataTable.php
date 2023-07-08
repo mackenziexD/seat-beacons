@@ -25,7 +25,7 @@ class BeaconsDataTable extends DataTable
             });
     }
 
-    public function query(YourModel $model)
+    public function query(CorporationStructure $model)
     {
         return $model->newQuery();
     }
