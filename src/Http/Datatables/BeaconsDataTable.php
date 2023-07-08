@@ -11,16 +11,16 @@ class BeaconsDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('info->name', function ($row) {
+            ->editColumn('name', function ($row) {
                 return $row->info->name;
             })
-            ->editColumn('solar_system->constellation->name', function ($row) {
+            ->editColumn('constellation', function ($row) {
                 return $row->solar_system->constellation->name;
             })
-            ->editColumn('solar_system->constellation->region->name', function ($row) {
+            ->editColumn('region', function ($row) {
                 return $row->solar_system->constellation->region->name;
             })
-            ->editColumn('fuel_expires', function ($row) {
+            ->editColumn('fuel_expires_in_days', function ($row) {
                 return \Carbon\Carbon::parse($row->fuel_expires)->diffInDays();
             });
     }

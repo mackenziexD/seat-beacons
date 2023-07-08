@@ -6,7 +6,7 @@
     <div class="card">
         <div class="card-header">Beacons</div>
         <div class="card-body">
-            {{ $dataTable->table(['id' => 'fuel', 'class' => 'table table-hover']) }}
+            {{ $dataTable->table(['id' => 'beacons-table', 'class' => 'table table-hover']) }}
         </div>
     </div>
 @stop
