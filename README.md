@@ -15,6 +15,9 @@ You can install the package via composer:
 composer require helious/seat-beacons
 ```
 
+## Permissions
+- Remember to give Roles the `Access Beacons` role under Seat-beacons
+
 ## Notifications
 1. Create A `Integrations` with the your Slack/Discord webhook.
 2. Go To Sidebar > `Notifications` > `Notification Groups`
