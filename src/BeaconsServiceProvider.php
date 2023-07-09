@@ -34,11 +34,14 @@ class BeaconsServiceProvider extends AbstractSeatPlugin
         $this->loadViewsFrom(__DIR__.'/resources/views', 'seat-beacons');
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
 
+        $this->mergeConfigFrom(
+            __DIR__ . '/Config/notifications.alerts.php', 'notifications.alerts'
+        );
         
-        $this->app->booted(function () {
-            $schedule = $this->app->make(Schedule::class);
-            $schedule->command('beacons:fuel')->everyMinute();
-        });
+        // $this->app->booted(function () {
+        //     $schedule = $this->app->make(Schedule::class);
+        //     $schedule->command('beacons:fuel')->everyMinute();
+        // });
     }
 
     

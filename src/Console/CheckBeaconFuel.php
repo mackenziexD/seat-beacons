@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 use Helious\SeatBeacons\Notifications\StuctureWarnings;
 
+use Seat\Web\Models\User;
+
 
 /**
  * Class RemindOperation.
@@ -33,21 +35,23 @@ class CheckBeaconFuel extends Command
     public function handle()
     {
         $structures = CorporationStructure::where('type_id', '35840')->get();
-        $structureList = "";
-        $structures->each(function ($structure) use (&$structureList) {
-            $services = $structure->services;
-            $services->each(function ($service) use ($structure, &$structureList) {
-                if($service->state === 'online') {
-                    $fuel_expires = Carbon::parse($structure->fuel_expires);
-                    $days_left = $fuel_expires->diffInDays();
-                    if($days_left <= 7) {
-                        $structureList .= $structure->info->name . " " . $days_left . " days left\n";
-                    }
-                } else {
-                    $structureList .= $structure->info->name . " offline\n";
+        $structureMessage = '';
+
+        foreach ($structures as $structure) {
+            $services = $structure->services->first();
+            echo $structure->info->name . " " . $services->state . "\n";
+            if ($services->state === 'online') {
+                $fuel_expires = Carbon::parse($structure->fuel_expires);
+                $days_left = $fuel_expires->diffInDays();
+                if ($days_left <= 7) {
+                    $structureMessage .= $structure->info->name . ": " . $days_left . " Days Left\n";
                 }
-            });
-        });
-        Notification::send($structureList, new StuctureWarnings());
+            } else {
+                $structureMessage .= $structure->info->name . ": OFFLINE\n";
+            }
+
+        }
+        
+        Notification::send(new StuctureWarnings($structureMessage));
     }
 }

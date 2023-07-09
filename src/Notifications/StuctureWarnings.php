@@ -2,18 +2,27 @@
 
 namespace Helious\SeatBeacons\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\SlackAttachmentField;
 use Illuminate\Notifications\Messages\SlackMessage;
+use Raykazi\Seat\SeatApplication\Models\ApplicationModel;
+use Seat\Notifications\Notifications\AbstractNotification;
+use Seat\Notifications\Traits\NotificationTools;
 
 /**
  * Class StuctureWarnings.
  *
  * @package Seat\Kassie\Calendar\Notifications
  */
-class StuctureWarnings extends Notification
+class StuctureWarnings extends AbstractNotification
 {
-    use Queueable;
+    use NotificationTools;
+    
+    private $message;
+    
+    public function __construct($message)
+    {
+        $this->message = $message;
+    }
 
     /**
      * @param $notifiable
@@ -33,7 +42,7 @@ class StuctureWarnings extends Notification
 
         return (new SlackMessage)
             ->success()
-            ->from('SeAT Beacons', ':warning:')
-            ->content('Beacon Fuel Warning');
+            ->from('SeAT Beacons')
+            ->content('**Structure Data**' . "\n" . $this->message);
     }
 }
