@@ -2,6 +2,8 @@
 
 namespace Helious\SeatBeacons\Http\Datatables;
 
+use Yajra\DataTables\Html\Button;
+use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Seat\Eveapi\Models\Corporation\CorporationStructure;
 
@@ -21,13 +23,14 @@ class BeaconsDataTable extends DataTable
                 return $row->solar_system->constellation->region->name;
             })
             ->editColumn('fuel_expires', function ($row) {
+                if($row->services->first()->state === 'offline') return 'Offline';
                 return \Carbon\Carbon::parse($row->fuel_expires)->diffInDays();
             });
     }
 
     public function query(CorporationStructure $model)
     {
-        return $model->newQuery();
+        return $model->query()->where('type_id', '35840');
     }
 
     public function html()
@@ -36,7 +39,22 @@ class BeaconsDataTable extends DataTable
                     ->setTableId('beacons-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->orderBy(3);
+                    ->dom('Bfrtip')
+                    ->orderBy(3, 'asc')
+                    ->buttons(
+                        Button::make('csv')
+                        ->text('<i class="fas fa-file-csv"></i> Export CSV')
+                    )
+                    ->parameters([
+                        'createdRow' => "function ( row, data, dataIndex ) {
+                            if ( data['fuel_expires'] === 'Offline' ) {
+                                $(row).addClass('bg-danger');
+                            }
+                            else if ( data['fuel_expires'] <= 7 ) {
+                                $(row).addClass('bg-warning');
+                            }
+                        }",
+                    ]);
     }
 
     protected function getColumns()
@@ -45,7 +63,7 @@ class BeaconsDataTable extends DataTable
             'name',
             'constellation',
             'region',
-            'fuel_expires'
+            ['data' => 'fuel_expires', 'title' => 'Fuel Expires (days)']
         ];
     }
 
