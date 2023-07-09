@@ -3,7 +3,8 @@
 namespace Helious\SeatBeacons;
 
 use Seat\Services\AbstractSeatPlugin;
-
+use Illuminate\Console\Scheduling\Schedule;
+use Helious\SeatBeacons\Console\CheckBeaconFuel;
 
 class BeaconsServiceProvider extends AbstractSeatPlugin
 {
@@ -27,9 +28,25 @@ class BeaconsServiceProvider extends AbstractSeatPlugin
      */
     public function boot()
     {
+        $this->addCommands();
+
         $this->loadRoutesFrom(__DIR__.'/routes.php');
         $this->loadViewsFrom(__DIR__.'/resources/views', 'seat-beacons');
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+
+        
+        $this->app->booted(function () {
+            $schedule = $this->app->make(Schedule::class);
+            $schedule->command('beacons:fuel')->everyMinute();
+        });
+    }
+
+    
+    private function addCommands() 
+    {
+        $this->commands([
+            CheckBeaconFuel::class,
+        ]);
     }
 
     /**
@@ -41,6 +58,8 @@ class BeaconsServiceProvider extends AbstractSeatPlugin
     {
         return __DIR__.'/routes.php';
     }
+
+    
 
     /**
      * Return the plugin public name as it should be displayed into settings.
