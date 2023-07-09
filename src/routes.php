@@ -7,6 +7,7 @@ Route::group([
     'middleware' => [
         'web',
         'auth',
+        'can:seat-beacons.access',
     ],
 ], function()
 {
@@ -14,7 +15,6 @@ Route::group([
     Route::get('/', [
         'uses' => 'BeaconsController@index',
         'as' => 'seat-beacons::index',
-        'middleware' => 'can:character.sheet,character',
     ]);
 
 });
