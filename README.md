@@ -3,7 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/helious/seat-beacons.svg?style=flat-square)](https://packagist.org/packages/helious/seat-beacons)
 [![Total Downloads](https://img.shields.io/packagist/dt/helious/seat-beacons.svg?style=flat-square)](https://packagist.org/packages/helious/seat-beacons)
 
-Beacons plugin for [SeAT](https://github.com/eveseat/seat) that corp/alliance fuel bunnies to check the fuel left in days of beacons for all corperations plugged into SeAT also sends notfications at downtime with any beacons below 7 days/offline beacons to notifications.
+Beacons plugin for [SeAT](https://github.com/eveseat/seat) that corp/alliance fuel bunnies to check the fuel left in days of beacons for all corperations plugged into SeAT also sends notfications at downtime with any beacons below 7 days or offline to notifications.
 
 ![https://i.imgur.com/UtfvJ0B.png](https://i.imgur.com/UtfvJ0B.png)
 
