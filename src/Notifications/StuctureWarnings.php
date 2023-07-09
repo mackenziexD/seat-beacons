@@ -40,9 +40,17 @@ class StuctureWarnings extends AbstractNotification
     public function toSlack($notifiable)
     {
 
+        // handle max character count for discord
+        if(strlen($this->message) > 2000) {
+            return (new SlackMessage)
+                ->error()
+                ->from('SeAT Beacons')
+                ->content('**Structure Data**' . PHP_EOL . 'Message too long to send to slack. Please check the SeAT Beacons page for more information.');
+        }
+
         return (new SlackMessage)
             ->success()
             ->from('SeAT Beacons')
-            ->content('**Structure Data**' . "\n" . $this->message);
+            ->content('**Structure Data**' . PHP_EOL . $this->message);
     }
 }
