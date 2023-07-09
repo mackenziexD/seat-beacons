@@ -51,6 +51,9 @@ class CheckBeaconFuel extends Command
             }
 
         }
+
+        // dont send empty message
+        if($structureMessage === '') return;
         
         Notification::send(new StuctureWarnings($structureMessage));
     }
