@@ -3,6 +3,11 @@
 @section('page_header', 'Beacons Dashboard')
 
 @section('full')
+<style>
+.dataTables_length{
+    text-align: right;
+}
+</style>
     <div class="card">
         <div class="card-header">Beacons</div>
         <div class="card-body">

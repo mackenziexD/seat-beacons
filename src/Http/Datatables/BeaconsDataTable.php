@@ -39,7 +39,7 @@ class BeaconsDataTable extends DataTable
                     ->setTableId('beacons-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->dom('Bfrtip')
+                    ->dom('Blfrtip')
                     ->orderBy(3, 'asc')
                     ->buttons(
                         Button::make('csv')
