@@ -45,7 +45,7 @@ class CheckBeaconFuel extends Command
                 $fuel_expires = Carbon::parse($structure->fuel_expires);
                 $days_left = $fuel_expires->diffInDays();
                 if ($days_left <= 7) {
-                    $structureMessage .= '`'. $$structure->info->name . ':' . $days_left . ' Days Left `'. PHP_EOL;
+                    $structureMessage .= '`'. $structure->info->name . ': ' . $days_left . ' Days Left `'. PHP_EOL;
                 }
             } else {
                 $structureMessage .= '`'. $structure->info->name . ': OFFLINE `'. PHP_EOL;
