@@ -13,7 +13,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Helious\\SeatBeacons\\": "src"
+            "Helious\\SeatBeacons\\": "src/"
         }
     },
     "require": {
