@@ -57,20 +57,26 @@ class CheckBeaconFuel extends Command
         // dont send empty message
         if($structureMessage === '') return;
 
+        $this->dispatch($structureMessage);
+    }
+    
+    /**
+     * Queue notification based on User Creation.
+     *
+     * @param $structureMessage
+     */
+    private function dispatch($structureMessage)
+    {
+
         // Get notification groups with 'seat_beacons_warnings' alert type
         $groups = NotificationGroup::with('alerts')
             ->whereHas('alerts', function ($query) {
                 $query->where('alert', 'seat_beacons_warnings');
             })->get();
 
-        // Check if there are any notification groups
-        if (!$groups->isEmpty()) {
-            // Dispatch notifications using the dispatchNotifications method
-            $this->dispatchNotifications('seat_beacons_warnings', $groups, function ($notificationClass) use ($structureMessage) {
-                return new $notificationClass($structureMessage);
-            });
-        }
-
+        $this->dispatchNotifications('seat_beacons_warnings', $groups, function ($notificationClass) use ($structureMessage) {
+            return new $notificationClass($structureMessage);
+        });
 
     }
 }
