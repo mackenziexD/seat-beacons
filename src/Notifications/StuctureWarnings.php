@@ -32,17 +32,15 @@ class StuctureWarnings extends AbstractDiscordNotification implements ShouldQueu
         $message->from('SeAT Beacons');
 
         // handle max character count for discord
-        // if (strlen($this->message) > 2000) {
-        //     $content = 'Message too long to send to Discord. Please check the SeAT Beacons page for more information.';
-        // } else {
-        //     $content = PHP_EOL . $this->message;
-        // }
+        if (strlen($this->message) > 2000) {
+            $content = 'Message too long to send to Discord. Please check the SeAT Beacons page for more information.';
+        } else {
+            $content = PHP_EOL . $this->message;
+        }
 
-        // $message->content($content);
-        $message->embed(function ($embed) {
-            $embed->title('Structure Warnings');
-            $embed->color(0x00ff00);
-            $embed->description('The following structures have been found to be in a state of disrepair:');
-        });
+        $message->content($content);
+
+        return $message;
+
     }
 }
