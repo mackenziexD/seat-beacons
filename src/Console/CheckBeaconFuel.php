@@ -40,7 +40,6 @@ class CheckBeaconFuel extends Command
 
         foreach ($structures as $structure) {
             $services = $structure->services->first();
-            echo $structure->info->name . " " . $services->state . "\n";
             if ($services->state === 'online') {
                 $fuel_expires = Carbon::parse($structure->fuel_expires);
                 $days_left = $fuel_expires->diffInDays();

@@ -2,55 +2,47 @@
 
 namespace Helious\SeatBeacons\Notifications;
 
-use Illuminate\Notifications\Messages\SlackAttachmentField;
-use Illuminate\Notifications\Messages\SlackMessage;
-use Raykazi\Seat\SeatApplication\Models\ApplicationModel;
+use Seat\Notifications\Notifications\AbstractDiscordNotification;
 use Seat\Notifications\Notifications\AbstractNotification;
-use Seat\Notifications\Traits\NotificationTools;
+use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
+use Seat\Notifications\Services\Discord\Messages\DiscordEmbedField;
+use Seat\Notifications\Services\Discord\Messages\DiscordMessage;
 
-/**
- * Class StuctureWarnings.
- *
- * @package Seat\Kassie\Calendar\Notifications
- */
-class StuctureWarnings extends AbstractNotification
+class StuctureWarnings extends AbstractDiscordNotification implements ShouldQueue
 {
-    use NotificationTools;
-    
+    use SerializesModels;
+
     private $message;
-    
+
     public function __construct($message)
     {
         $this->message = $message;
     }
 
     /**
+     * @param DiscordMessage $message
      * @param $notifiable
-     * @return array
+     * @return void
      */
-    public function via($notifiable)
+    protected function populateMessage(DiscordMessage $message, $notifiable)
     {
-        return ['slack'];
-    }
-
-    /**
-     * @param $notifiable
-     * @return mixed
-     */
-    public function toSlack($notifiable)
-    {
+        $message->from('SeAT Beacons');
 
         // handle max character count for discord
-        if(strlen($this->message) > 2000) {
-            return (new SlackMessage)
-                ->error()
-                ->from('SeAT Beacons')
-                ->content('**Structure Data**' . PHP_EOL . 'Message too long to send to slack. Please check the SeAT Beacons page for more information.');
-        }
+        // if (strlen($this->message) > 2000) {
+        //     $content = 'Message too long to send to Discord. Please check the SeAT Beacons page for more information.';
+        // } else {
+        //     $content = PHP_EOL . $this->message;
+        // }
 
-        return (new SlackMessage)
-            ->success()
-            ->from('SeAT Beacons')
-            ->content('**Structure Data**' . PHP_EOL . $this->message);
+        // $message->content($content);
+        $message->embed(function ($embed) {
+            $embed->title('Structure Warnings');
+            $embed->color(0x00ff00);
+            $embed->description('The following structures have been found to be in a state of disrepair:');
+        });
     }
 }

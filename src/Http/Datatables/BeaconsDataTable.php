@@ -67,7 +67,7 @@ class BeaconsDataTable extends DataTable
         ];
     }
 
-    protected function filename()
+    protected function filename(): string
     {
         return 'Beacons_' . date('YmdHis');
     }
