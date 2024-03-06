@@ -21,5 +21,4 @@ class BeaconsController extends Controller
         return $dataTable->render('seat-beacons::beacons.index');
     }
 
-
 }

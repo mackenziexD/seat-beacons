@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Seat\Notifications\Models\NotificationGroup;
 use Illuminate\Support\Facades\Notification;
 use Helious\SeatBeacons\Notifications\StuctureWarnings;
-use Seat\Notifications\Traits\NotificationDispatchTool;
+
 use Seat\Web\Models\User;
 
 
@@ -20,8 +20,6 @@ use Seat\Web\Models\User;
  */
 class CheckBeaconFuel extends Command
 {
-    use NotificationDispatchTool;
-    
     /**
      * @var string
      */
@@ -42,6 +40,7 @@ class CheckBeaconFuel extends Command
 
         foreach ($structures as $structure) {
             $services = $structure->services->first();
+            echo $structure->info->name . " " . $services->state . "\n";
             if ($services->state === 'online') {
                 $fuel_expires = Carbon::parse($structure->fuel_expires);
                 $days_left = $fuel_expires->diffInDays();
@@ -57,26 +56,61 @@ class CheckBeaconFuel extends Command
         // dont send empty message
         if($structureMessage === '') return;
 
-        $this->dispatch($structureMessage);
-    }
-    
-    /**
-     * Queue notification based on User Creation.
-     *
-     * @param $structureMessage
-     */
-    private function dispatch($structureMessage)
-    {
+        // detect handlers setup for the current notification
+        $handlers = config('notifications.alerts.seat_beacons_warnings.handlers', []);
 
-        // Get notification groups with 'seat_beacons_warnings' alert type
-        $groups = NotificationGroup::with('alerts')
+        // retrieve routing candidates for the current notification
+        $routes = $this->getRoutingCandidates();
+
+        // in case no routing candidates has been delivered, exit
+        if ($routes->isEmpty())
+            return;
+
+        // attempt to enqueue a notification for each routing candidates
+        $routes->each(function ($integration) use ($handlers, $structureMessage) {
+            if (array_key_exists($integration->channel, $handlers)) {
+
+                // extract handler from the list
+                $handler = $handlers[$integration->channel];
+
+                // enqueue the notification
+                Notification::route($integration->channel, $integration->route)
+                    ->notify(new $handler($structureMessage));
+            }
+        });
+
+    }
+
+    /**
+     * Provide a unique list of notification channels (including driver and route).
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    private function getRoutingCandidates()
+    {
+        $settings = NotificationGroup::with('alerts')
             ->whereHas('alerts', function ($query) {
                 $query->where('alert', 'seat_beacons_warnings');
             })->get();
 
-        $this->dispatchNotifications('seat_beacons_warnings', $groups, function ($notificationClass) use ($structureMessage) {
-            return new $notificationClass($structureMessage);
+        $routes = $settings->map(function ($group) {
+            return $group->integrations->map(function ($channel) {
+
+                // extract the route value from settings field
+                $settings = (array) $channel->settings;
+                $key = array_key_first($settings);
+                $route = $settings[$key];
+
+                // build a composite object built with channel and route
+                return (object) [
+                    'channel' => $channel->type,
+                    'route' => $route,
+                ];
+            });
         });
 
+        return $routes->flatten()->unique(function ($integration) {
+            return $integration->channel . $integration->route;
+        });
     }
 }
