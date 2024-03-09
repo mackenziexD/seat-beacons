@@ -35,12 +35,13 @@ class CheckBeaconFuel extends Command
      */
     public function handle()
     {
+        \Log::error('Checking for beacons offline or low on fuel.');
         $structures = CorporationStructure::where('type_id', '35840')->get();
         $structureMessage = '';
 
         foreach ($structures as $structure) {
             $services = $structure->services->first();
-            echo $structure->info->name . " " . $services->state . "\n";
+
             if ($services->state === 'online') {
                 $fuel_expires = Carbon::parse($structure->fuel_expires);
                 $days_left = $fuel_expires->diffInDays();
@@ -75,7 +76,7 @@ class CheckBeaconFuel extends Command
 
                 // enqueue the notification
                 Notification::route($integration->channel, $integration->route)
-                    ->notify(new $handler($structureMessage));
+                    ->notifyNow(new $handler($structureMessage));
             }
         });
 
