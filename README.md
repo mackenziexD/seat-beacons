@@ -1,7 +1,9 @@
 # SeAT-Beacons - Beacons Dashboard plugin for SeAT
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/helious/seat-beacons.svg?style=flat-square)](https://packagist.org/packages/helious/seat-beacons)
-[![Total Downloads](https://img.shields.io/packagist/dt/helious/seat-beacons.svg?style=flat-square)](https://packagist.org/packages/helious/seat-beacons)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/helious/seat-beacons.svg?style=for-the-badge)](https://packagist.org/packages/helious/seat-beacons)
+![](https://img.shields.io/badge/SEAT-5.X-X?style=for-the-badge&color=blue)
+![](https://img.shields.io/badge/SEAT-4.X-X?style=for-the-badge&color=blue)
+[![Total Downloads](https://img.shields.io/packagist/dt/helious/seat-beacons.svg?style=for-the-badge)](https://packagist.org/packages/helious/seat-beacons)
 
 Beacons plugin for [SeAT](https://github.com/eveseat/seat) and was created out of necessity to see exactly how long until a beacon ran out of fuel so refuel ops could be coordinated around the times. 
 
